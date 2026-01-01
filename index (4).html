@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudySpace Pro</title>
+    
+    <!-- Professional Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (Styling Framework) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Link to your custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-700">
+
+    <div class="min-h-screen flex flex-col md:flex-row max-w-7xl mx-auto bg-white shadow-2xl md:my-8 md:rounded-3xl overflow-hidden border border-slate-200">
+
+        <!-- SIDEBAR (Desktop) -->
+        <nav class="md:w-64 bg-slate-900 text-slate-300 flex flex-col justify-between hidden md:flex">
+            <div class="p-8">
+                <div class="flex items-center gap-3 text-white mb-10">
+                    <div class="bg-indigo-500 p-2 rounded-lg">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    </div>
+                    <span class="font-bold text-lg tracking-tight">StudySpace</span>
+                </div>
+
+                <div class="space-y-2">
+                    <button onclick="switchTab('dashboard')" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-white/10 text-sm font-medium text-left">
+                        <i data-lucide="timer"></i> Focus Timer
+                    </button>
+                    <button onclick="switchTab('syllabus')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-white/10 text-sm font-medium text-left">
+                        <i data-lucide="book-open-check"></i> Syllabus Tracker
+                    </button>
+                    <button onclick="switchTab('analytics')" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 hover:bg-white/10 text-sm font-medium text-left">
+                        <i data-lucide="bar-chart-2"></i> Analytics
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-8 border-t border-slate-800">
+                <div class="bg-slate-800 rounded-xl p-4">
+                    <p class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-2">Daily Goal</p>
+                    <div class="flex justify-between items-end mb-1">
+                        <span class="text-white font-bold" id="sidebar-hours">0h</span>
+                        <span class="text-xs">of 6h</span>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-1.5">
+                        <div id="sidebar-progress" class="bg-indigo-500 h-1.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 bg-slate-50 relative h-[100vh] md:h-auto overflow-y-auto custom-scrollbar">
+            
+            <!-- Mobile Header -->
+            <header class="bg-white/80 backdrop-blur-md sticky top-0 z-20 border-b border-slate-200 px-6 py-4 flex justify-between items-center md:hidden">
+                <div class="flex items-center gap-2">
+                    <div class="bg-indigo-600 p-1.5 rounded-md text-white">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                    </div>
+                    <span class="font-bold text-slate-900">StudySpace</span>
+                </div>
+                <div class="text-xs font-semibold bg-slate-100 px-3 py-1 rounded-full text-slate-500" id="current-date-mobile">
+                    Today
+                </div>
+            </header>
+
+            <!-- Desktop Header -->
+            <header class="hidden md:flex justify-between items-center px-8 py-6 bg-white border-b border-slate-100">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-800" id="page-title">Dashboard</h2>
+                    <p class="text-slate-500 text-sm">Manage your professional growth.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden lg:block">
+                        <p class="text-sm font-bold text-slate-700">Student</p>
+                        <p class="text-xs text-slate-500">Pro Account</p>
+                    </div>
+                    <div class="h-10 w-10 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center font-bold">S</div>
+                </div>
+            </header>
+
+            <div class="p-6 md:p-8 pb-24 md:pb-8">
+                
+                <!-- VIEW 1: DASHBOARD (Timer) -->
+                <div id="view-dashboard" class="view-section animate-fade-in">
+                    
+                    <div class="grid lg:grid-cols-2 gap-6">
+                        <!-- Timer Card -->
+                        <div class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                <i data-lucide="clock" class="w-32 h-32"></i>
+                            </div>
+
+                            <div class="relative z-10">
+                                <div class="flex items-center gap-2 mb-8">
+                                    <span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700 flex items-center gap-1">
+                                        <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> Live System
+                                    </span>
+                                </div>
+
+                                <div class="text-center py-6">
+                                    <div id="timer-display" class="text-6xl md:text-7xl font-mono font-bold text-slate-800 tracking-tighter mb-2">00:00:00</div>
+                                    <p id="timer-status" class="text-slate-400 font-medium">Select a mode to begin</p>
+                                </div>
+
+                                <div id="controls-start" class="grid grid-cols-2 gap-4 mt-8">
+                                    <button onclick="startTimer('self-study')" class="btn-primary bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200">
+                                        Start Self Study
+                                    </button>
+                                    <button onclick="startTimer('coaching')" class="btn-primary bg-white text-slate-700 border border-slate-200 hover:bg-slate-50">
+                                        Start Coaching
+                                    </button>
+                                </div>
+
+                                <div id="controls-running" class="mt-8 hidden">
+                                    <button onclick="stopTimer()" class="w-full py-4 rounded-xl bg-red-50 text-red-600 font-bold border border-red-100 hover:bg-red-100 transition-colors flex items-center justify-center gap-2">
+                                        <i data-lucide="square" class="w-5 h-5 fill-current"></i> End Session
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subject Selection -->
+                        <div class="space-y-6">
+                            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Focus Subject</label>
+                                <div class="relative">
+                                    <select id="subject-select" class="w-full p-4 bg-slate-50 rounded-xl border border-slate-200 font-medium text-slate-700 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none appearance-none">
+                                        <option value="Math">Mathematics</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Biology">Biology</option>
+                                        <option value="English">English</option>
+                                        <option value="Social Science">Social Science</option>
+                                    </select>
+                                    <i data-lucide="chevron-down" class="absolute right-4 top-4 text-slate-400 pointer-events-none w-5 h-5"></i>
+                                </div>
+                            </div>
+
+                            <div class="bg-indigo-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                                <div class="relative z-10">
+                                    <h3 class="font-bold text-lg mb-1">Study Tip</h3>
+                                    <p class="text-indigo-200 text-sm leading-relaxed">"Consistency is the key. A 1:1 ratio between coaching and self-study ensures deep learning."</p>
+                                </div>
+                                <div class="absolute -bottom-4 -right-4 bg-white/10 w-24 h-24 rounded-full blur-xl"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Logs Table -->
+                    <div class="mt-8">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i data-lucide="history" class="text-slate-400 w-5 h-5"></i> Recent Activity
+                        </h3>
+                        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left text-sm">
+                                    <thead class="bg-slate-50 text-slate-500 uppercase text-xs font-bold">
+                                        <tr>
+                                            <th class="px-6 py-4">Type</th>
+                                            <th class="px-6 py-4">Subject</th>
+                                            <th class="px-6 py-4">Date</th>
+                                            <th class="px-6 py-4 text-right">Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="logs-list" class="divide-y divide-slate-100">
+                                        <!-- JS populates this -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 2: SYLLABUS -->
+                <div id="view-syllabus" class="view-section hidden animate-fade-in">
+                    <div class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                            <div>
+                                <h2 class="font-bold text-xl text-slate-800">Syllabus Tracker</h2>
+                                <p class="text-slate-500 text-sm">Track your completion status chapter by chapter.</p>
+                            </div>
+                            <div class="flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-lg border border-indigo-100">
+                                <span class="text-indigo-600 font-bold text-lg" id="syllabus-progress-text">0%</span>
+                                <span class="text-indigo-600 text-xs font-medium uppercase">Completed</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3 mb-8">
+                            <input id="syllabus-input" type="text" placeholder="Add new topic or chapter..." class="flex-1 p-4 rounded-xl border border-slate-200 bg-slate-50 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                            <button onclick="addSyllabusItem()" class="bg-indigo-600 text-white px-6 rounded-xl font-bold hover:bg-indigo-700 shadow-md transition-colors">Add</button>
+                        </div>
+
+                        <div id="syllabus-list" class="space-y-3">
+                            <!-- JS populates this -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 3: ANALYTICS -->
+                <div id="view-analytics" class="view-section hidden animate-fade-in">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="p-2 bg-indigo-100 text-indigo-600 rounded-lg">
+                                    <i data-lucide="book-open" class="w-5 h-5"></i>
+                                </div>
+                                <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Self Study</span>
+                            </div>
+                            <p id="stat-self" class="text-4xl font-bold text-slate-800 mt-2">0.0h</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                            <div class="flex items-center gap-3 mb-2">
+                                <div class="p-2 bg-purple-100 text-purple-600 rounded-lg">
+                                    <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                                </div>
+                                <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Coaching</span>
+                            </div>
+                            <p id="stat-coaching" class="text-4xl font-bold text-slate-800 mt-2">0.0h</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="font-bold text-lg mb-6">Subject Breakdown</h3>
+                        <div id="stats-bars" class="space-y-6">
+                            <!-- JS Generated Bars -->
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button onclick="clearAllData()" class="text-red-500 text-sm font-medium hover:text-red-700 transition-colors">
+                            Reset all data & start fresh
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Mobile Bottom Nav -->
+        <div class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 pb-safe z-30">
+            <div class="flex justify-around p-2">
+                <button onclick="switchTab('dashboard')" class="mobile-nav-btn active flex flex-col items-center p-2 rounded-xl flex-1 text-slate-400">
+                    <i data-lucide="timer" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Focus</span>
+                </button>
+                <button onclick="switchTab('syllabus')" class="mobile-nav-btn flex flex-col items-center p-2 rounded-xl flex-1 text-slate-400">
+                    <i data-lucide="list-checks" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Topics</span>
+                </button>
+                <button onclick="switchTab('analytics')" class="mobile-nav-btn flex flex-col items-center p-2 rounded-xl flex-1 text-slate-400">
+                    <i data-lucide="bar-chart-2" class="w-6 h-6 mb-1"></i>
+                    <span class="text-[10px] font-bold">Stats</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
+
